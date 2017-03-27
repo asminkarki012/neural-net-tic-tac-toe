@@ -16,6 +16,8 @@ var tictactoe = {
 var State = function(prev_state) {
 
 	this.turn = tictactoe.X_TURN;
+
+	/* 3x3 board as a 2D array */
 	this.board = [[],[],[]];
 
 	if (prev_state != undefined) {
@@ -64,6 +66,62 @@ var State = function(prev_state) {
 		}
 		return false;
 	}
+
+	this.draw = function(ctx, width, height) {
+		this.drawGrid(ctx, width, height);
+
+		for (var i = 0; i < tictactoe.SIZE; i++) {
+			for (var j = 0; j < tictactoe.SIZE; j++) {
+				var piece = this.board[i][j];
+				var x = (1 + i*2)*width/6;
+				var y = (1 + j*2)*height/6;
+				if (piece === tictactoe.X) {
+					this.drawX(ctx, x, y);
+				}
+				else if (piece === tictactoe.O) {
+					this.drawO(ctx, x, y);
+				}
+			}
+		}
+	}
+
+	this.drawGrid = function(ctx, width, height) {
+		ctx.beginPath();	
+		
+		/* Draw horizontal lines */
+		ctx.moveTo(0, height/3);
+		ctx.lineTo(width, height/3);
+		ctx.moveTo(0, 2*height/3);
+		ctx.lineTo(width, 2*height/3);
+
+		/* Draw vertical lines */
+		ctx.moveTo(width/3, 0)
+		ctx.lineTo(width/3, height)
+		ctx.moveTo(2*width/3, 0)
+		ctx.lineTo(2*width/3, height)
+
+		ctx.stroke();
+	}
+
+	this.drawX = function(ctx, x, y) {
+		var size = 30;	
+		ctx.beginPath();
+
+		ctx.moveTo(x - size, y - size);
+		ctx.lineTo(x + size, y + size);
+
+		ctx.moveTo(x + size, y - size);
+		ctx.lineTo(x - size, y + size);
+
+		ctx.stroke();
+	}
+
+	this.drawO = function(ctx, x, y) {
+		var size = 30;
+		ctx.beginPath();
+		ctx.arc(x, y, size, 0, 2*Math.PI);
+		ctx.stroke();
+	}
 }
 
 
@@ -91,14 +149,22 @@ var game = {
 
 		if (state.board[row][col] === tictactoe.EMPTY) {
 			state.board[row][col] = tictactoe.get_piece(state.turn);
-			state.turn ^= state.turn;
+			state.turn ^= 1;
 		}
+
+		game.draw();
 	},
 
+	
+	draw: function() {
+		var canvas = document.getElementById("canvas");
+		var ctx = canvas.getContext("2d");
+		game.state.draw(ctx, canvas.width, canvas.height);
+	},
 
 	play: function() {
 		game.init();
-
+		game.draw();
 	}
 
 }
