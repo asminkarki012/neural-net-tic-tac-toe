@@ -61,7 +61,7 @@ var State = function(prev_state) {
 			return true;
 		}
 
-		if (this.board[0][0] != tictactoe.EMPTY && this.board[0][2] === this.board[1][1] && this.board[1][1] === this.board[2][0]) {
+		if (this.board[0][2] != tictactoe.EMPTY && this.board[0][2] === this.board[1][1] && this.board[1][1] === this.board[2][0]) {
 			return true;
 		}
 		return false;
@@ -142,6 +142,18 @@ var game = {
 		}
 		
 		game.state = state;
+
+		var canvas = document.getElementById("canvas");
+		canvas.addEventListener("mousedown", function(event) {
+			var x = event.x - canvas.offsetLeft;
+			var y = event.y - canvas.offsetTop;
+			
+			x = Math.floor(x/(canvas.width/3));
+			y = Math.floor(y/(canvas.height/3));
+
+			game.make_move(x, y);
+	
+		}, false);
 	},
 
 	make_move: function(row, col) {
@@ -149,16 +161,23 @@ var game = {
 
 		if (state.board[row][col] === tictactoe.EMPTY) {
 			state.board[row][col] = tictactoe.get_piece(state.turn);
+			game.draw();	
+			if (game.state.isGameOver()) {
+				alert(game.state.turn + " wins!");
+				game.init();
+				game.draw();
+				return;
+			}
 			state.turn ^= 1;
 		}
-
-		game.draw();
 	},
 
 	
 	draw: function() {
 		var canvas = document.getElementById("canvas");
+
 		var ctx = canvas.getContext("2d");
+		ctx.clearRect(0,0,canvas.width, canvas.height);
 		game.state.draw(ctx, canvas.width, canvas.height);
 	},
 
