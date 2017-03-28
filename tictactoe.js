@@ -31,6 +31,15 @@ var State = function(prev_state) {
 		return (this.isRowOver() || this.isColOver() || this.isDiagOver());
 	}
 
+	this.isBoardFull = function() {
+		for (var i = 0, var j = 0; i < tictactoe.SIZE; i++, j++) {
+			if (this.board[i][j] === tictactoe.EMPTY) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	/* Horizontal game over */
 	this.isRowOver = function() {
 		for (var i = 0; i < tictactoe.SIZE; i++) {
@@ -117,6 +126,11 @@ var game = {
 				alert(game.state.turn + " wins!");
 				game.play();
 				return;
+			}
+			else if (game.state.isBoardFull()) {
+				alert("It's a draw!");
+				game.play();
+				return();
 			}
 			state.turn ^= 1;
 		}
