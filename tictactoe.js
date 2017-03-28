@@ -19,15 +19,11 @@ var State = function(prev_state) {
 
 	/* 3x3 board as a 2D array */
 	this.board = [[],[],[]];
-
-	if (prev_state != undefined) {
-		this.turn ^= prev_state.turn;
-
-		//assign the board	
-		for (var i = 0; i < tictactoe.SIZE; i++) {
-			for (var j = 0; j < tictactoe.SIZE; j++) {
-				this.board[i][j] = prev_state.board[i][j];
-			}
+	
+	/* Initialise the board with empty */
+	for (var i = 0; i < tictactoe.SIZE; i++) {
+		for (var j = 0; j < tictactoe.SIZE; j++) {
+			this.board[i][j] = tictactoe.EMPTY;
 		}
 	}
 
@@ -68,7 +64,7 @@ var State = function(prev_state) {
 	}
 
 	this.draw = function(ctx, width, height) {
-		this.drawGrid(ctx, width, height);
+		ui.drawGrid(ctx, width, height);
 
 		for (var i = 0; i < tictactoe.SIZE; i++) {
 			for (var j = 0; j < tictactoe.SIZE; j++) {
@@ -76,51 +72,13 @@ var State = function(prev_state) {
 				var x = (1 + i*2)*width/6;
 				var y = (1 + j*2)*height/6;
 				if (piece === tictactoe.X) {
-					this.drawX(ctx, x, y);
+					ui.drawX(ctx, x, y);
 				}
 				else if (piece === tictactoe.O) {
-					this.drawO(ctx, x, y);
-				}
+					ui.drawO(ctx, x, y);
+				}	
 			}
 		}
-	}
-
-	this.drawGrid = function(ctx, width, height) {
-		ctx.beginPath();	
-		
-		/* Draw horizontal lines */
-		ctx.moveTo(0, height/3);
-		ctx.lineTo(width, height/3);
-		ctx.moveTo(0, 2*height/3);
-		ctx.lineTo(width, 2*height/3);
-
-		/* Draw vertical lines */
-		ctx.moveTo(width/3, 0)
-		ctx.lineTo(width/3, height)
-		ctx.moveTo(2*width/3, 0)
-		ctx.lineTo(2*width/3, height)
-
-		ctx.stroke();
-	}
-
-	this.drawX = function(ctx, x, y) {
-		var size = 30;	
-		ctx.beginPath();
-
-		ctx.moveTo(x - size, y - size);
-		ctx.lineTo(x + size, y + size);
-
-		ctx.moveTo(x + size, y - size);
-		ctx.lineTo(x - size, y + size);
-
-		ctx.stroke();
-	}
-
-	this.drawO = function(ctx, x, y) {
-		var size = 30;
-		ctx.beginPath();
-		ctx.arc(x, y, size, 0, 2*Math.PI);
-		ctx.stroke();
 	}
 }
 
@@ -131,18 +89,9 @@ var game = {
 	state: undefined,
 
 	init: function() {
-		var state = new State();
-		state.turn = tictactoe.X_TURN;	
+		game.state = new State();
 
-		//initialise the board with empty
-		for (var i = 0; i < tictactoe.SIZE; i++) {
-			for (var j = 0; j < tictactoe.SIZE; j++) {
-				state.board[i][j] = tictactoe.EMPTY;
-			}
-		}
-		
-		game.state = state;
-
+		/* Set up HTML canvas with mouseclick event */
 		var canvas = document.getElementById("canvas");
 		canvas.addEventListener("mousedown", function(event) {
 			var x = event.x - canvas.offsetLeft;
@@ -161,22 +110,22 @@ var game = {
 
 		if (state.board[row][col] === tictactoe.EMPTY) {
 			state.board[row][col] = tictactoe.get_piece(state.turn);
-			game.draw();	
+			game.draw();
+
+			/* Game over check */
 			if (game.state.isGameOver()) {
 				alert(game.state.turn + " wins!");
-				game.init();
-				game.draw();
+				game.play();
 				return;
 			}
 			state.turn ^= 1;
 		}
 	},
 
-	
 	draw: function() {
 		var canvas = document.getElementById("canvas");
-
 		var ctx = canvas.getContext("2d");
+
 		ctx.clearRect(0,0,canvas.width, canvas.height);
 		game.state.draw(ctx, canvas.width, canvas.height);
 	},
