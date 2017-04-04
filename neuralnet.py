@@ -8,7 +8,7 @@ class Neural_Net(object):
 
         # Set random weights initially
         self.biases = [np.random.randn(x, 1) for x in layers[1:]]
-        self.weights = [np.random.randn(x, y) for x, y in zip(layers[1:], layers[:-1])]
+        self.weights = [0 for x, y in zip(layers[1:], layers[:-1])]
 
         # Activation functions
         self.activation = sigmoid
@@ -67,14 +67,18 @@ class Neural_Net(object):
             self.weights = [w - learning_rate/len(training_data) * d * a for w, d, a in zip(self.weights, ds, acts)]
 
             #debug
-            #print("\n new weights: ")
-            #print(self.weights[0])
-
+           
 def sigmoid(x):
     return 1/(1+np.exp(-x)) 
 
 def sigmoid_derivative(x):
     return sigmoid(x) * (1 - sigmoid(x))
+
+def tanh(x):
+    return (np.tanh(x) + 1)/2
+
+def tanh_derivative(x):
+    return (1 - np.square(tanh(x)))
 
 def mse_derivative(actual, expected):
     return (actual - expected)
