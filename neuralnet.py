@@ -18,18 +18,23 @@ class Neural_Net(object):
         self.cost_derivative = mse_derivative
 
 
+        #debug
+        print("Input weights:")
+        print(self.weights[0])
+
+
     def feed_forward(self, X):
         y_hat = X
 
         for bias, weight in zip(self.biases, self.weights):
-            y_hat = sigmoid(1, np.dot(weight, y_hat))
+            y_hat = sigmoid(np.dot(weight, y_hat))
 
         return y_hat
       
     #def gradient_descent(self, training_data, learning_rate):
         #for (x, y) in training_data:
 
-    def backpropagation(self, training_data):
+    def backpropagation(self, training_data, learning_rate):
         
         for (x, y) in training_data:
             zs = [] # Weighted input vector of every layer 
@@ -49,23 +54,27 @@ class Neural_Net(object):
             delta_L = np.multiply(self.cost_derivative(acts[-1], y), self.activation_derivative(zs[-1]))
 
             # Backprop to get error in previous layers
-            for l in range(len(self.layers)-1, 0, -1):
+            for l in range(len(self.layers)-3, -1, -1):
                 w_L = np.transpose(self.weights[l+1])
                 prev_layer = w_L * delta_L
 
                 delta_l = np.multiply(prev_layer, self.activation_derivative(zs[l]))
                 ds.append(delta_l)
 
+            ds.append(delta_L)
+
             # Updates weights
-            self.weights = [w - training_rate/len(training_data) * d * a for w, d, a in zip(self.weights, ds, acts)]
+            self.weights = [w - learning_rate/len(training_data) * d * a for w, d, a in zip(self.weights, ds, acts)]
 
+            #debug
+            #print("\n new weights: ")
+            #print(self.weights[0])
 
+def sigmoid(x):
+    return 1/(1+np.exp(-x)) 
 
-def sigmoid(alpha, x):
-    return 1/(1+np.exp(-(alpha *x))) 
-
-def sigmoid_deriv(alpha, x):
-    return sigmoid(alpha, x) * (1 - sigmoid(alpha, x))
+def sigmoid_derivative(x):
+    return sigmoid(x) * (1 - sigmoid(x))
 
 def mse_derivative(actual, expected):
     return (actual - expected)
