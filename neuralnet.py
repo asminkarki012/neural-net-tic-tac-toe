@@ -17,7 +17,6 @@ class Neural_Net(object):
         # Cost functions
         self.cost_derivative = mse_derivative
 
-
         #debug
         print("Input weights:")
         print(self.weights[0])
@@ -30,9 +29,6 @@ class Neural_Net(object):
             y_hat = sigmoid(np.dot(weight, y_hat))
 
         return y_hat
-      
-    #def gradient_descent(self, training_data, learning_rate):
-        #for (x, y) in training_data:
 
     def backpropagation(self, training_data, learning_rate):
         
