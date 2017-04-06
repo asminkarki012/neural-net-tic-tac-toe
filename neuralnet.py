@@ -15,6 +15,7 @@ class Neural_Net(object):
         self.activation_derivative = sigmoid_derivative
 
         # Cost functions
+        self.cost = mse
         self.cost_derivative = mse_derivative
 
         #debug
@@ -99,6 +100,9 @@ def tanh(x):
 
 def tanh_derivative(x):
     return (1 - np.square(tanh(x)))
+
+def mse(actual, expected):
+    return 0.5 * np.square(actual - expected)
 
 def mse_derivative(actual, expected):
     return (actual - expected)
