@@ -30,7 +30,7 @@ class Neural_Net(object):
             y_hat = self.activation(z)
 
         return y_hat
-      
+
     def backpropagation(self, training_data, learning_rate):
         
         for (x, y) in training_data:
