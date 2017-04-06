@@ -8,7 +8,7 @@ class Neural_Net(object):
 
         # Set random weights initially
         self.biases = [np.random.randn(x, 1) for x in layers[1:]]
-        self.weights = [np.zeros(shape=(x, y)) for x, y in zip(layers[1:], layers[:-1])]
+        self.weights = [np.random.randn(x, y) for x, y in zip(layers[1:], layers[:-1])]
 
         # Activation functions
         self.activation = sigmoid 
@@ -19,8 +19,6 @@ class Neural_Net(object):
         self.cost_derivative = mse_derivative
 
         #debug
-        print("Input weights:")
-        print(self.weights)
 
 
     def feed_forward(self, X):
@@ -28,7 +26,7 @@ class Neural_Net(object):
 
         for bias, weight in zip(self.biases, self.weights):
             z = np.dot(weight, y_hat)
-            y_hat = self.activation(z)
+            y_hat = self.activation(z + bias)
 
         return y_hat
 
@@ -42,31 +40,43 @@ class Neural_Net(object):
             # Feed forward to get weighted input vector and output vector
             input = x
             for bias, weight in zip(self.biases, self.weights):
-                z = np.dot(weight, input) 
+                z = np.dot(weight, input)
                 zs.append(z)
-
-                input = self.activation(z)
-
                 acts.append(input)
-                
-                
+                input = self.activation(z + bias)
+
         
             # Error in output layer
-            delta_L = np.multiply(self.cost_derivative(acts[-1], y), self.activation_derivative(zs[-1]))
+            delta_L = np.multiply(self.cost_derivative(input, y), self.activation_derivative(zs[-1]))
+
+            print("error: " + str(np.linalg.norm(self.cost(input, y))))
+            #print("errrs: " + str(np.linalg.norm(delta_L)))
             
             # Backprop to get error in previous layers
             for l in range(len(self.layers)-3, -1, -1):
                 w_L = np.transpose(self.weights[l+1])
                 next_layer = w_L * delta_L
+
+                #print("next layer" + str(next_layer))
                 
                 delta_l = np.multiply(next_layer, self.activation_derivative(zs[l]))
+
+                #print("dleta_l" + str(delta_l))
                 ds.append(delta_l)
 
             ds.append(delta_L)
 
             # Updates weights
+            #for w, d, a in zip(self.weights, ds, acts):
+            #    print("weight: " + str(w))
+            #    print("deltas: " + str(d))
+            #    print("actives " + str(a))
+            #    print("d * a : " + str(w - np.multiply(d, np.matrix(a).T)))
+                
             self.weights = [w - learning_rate/len(training_data) * d * a for w, d, a in zip(self.weights, ds, acts)]
             self.biases = [b - learning_rate/len(training_data) * d for b, d in zip(self.biases, ds)]
+
+            
 
             #debug
 
@@ -77,7 +87,7 @@ class Neural_Net(object):
         layers.extend([nodes for nodes in data["layers"]])
 
 
-
+   
     def export_network(self):
         network = {}
         network["nr_inputs"] = self.layers[0]
@@ -93,7 +103,7 @@ def sigmoid(x):
     return 1/(1+np.exp(-x)) 
 
 def sigmoid_derivative(x):
-    return sigmoid(x) * (1 - sigmoid(x))
+    return (sigmoid(x) * (1 - sigmoid(x)))
 
 def tanh(x):
     return (np.tanh(x) + 1)/2
