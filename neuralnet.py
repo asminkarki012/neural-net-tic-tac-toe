@@ -8,7 +8,7 @@ class Neural_Net(object):
         self.layers = layers
    
         # Set random weights initially
-        self.biases = [np.random.randn(x, 1) for x, _ in layers] 
+        self.biases = [np.zeros([x, 1]) for x, _ in layers] 
         self.weights = [np.random.randn(x, y) for x, y in layers]
         
         # Activation functions
@@ -49,12 +49,13 @@ class Neural_Net(object):
 
             #print("input shape =", input.shape)
             for bias, weight in zip(self.biases, self.weights):
-                z = np.dot(weight, input)
-                #print("z shape =", z.shape)
-                zs.append(z)
-                #print("bias shape =", bias.shape)
                 acts.append(input)
-                input = self.activation(z + bias)
+           
+                z = np.dot(weight, input) + bias
+                zs.append(z)
+                #print("z shape =", z.shape)
+                #print("bias shape =", bias.shape)
+                input = self.activation(z)
                 #print("input shape = ", input.shape)
                 
             #print("acts.shape =", [i.shape for i in acts])
