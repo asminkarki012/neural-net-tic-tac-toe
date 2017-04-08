@@ -2,6 +2,8 @@
 
 from tictactoe import *
 from neuralnet import *
+from parser import *
+
 running = True
 #game = Tictactoe()
 
@@ -12,14 +14,16 @@ training_data = [(input, [0.9912, 0.481, 0.101])]
 
 output_before = net.feed_forward(input)
 
-for i in range(10000):
-    net.backpropagation(training_data, 0.5)
-
-
-print("Before training: ")
-print(output_before)
+# Training
+#net.train(training_data, 0.2, 1000)
 
 print("After training: ")
 output = net.feed_forward(input)
 print(net.weights)
 print(output)
+
+print(net.weights)
+
+with open("testnet.json", "w") as f:
+    f.write(net.export_network())
+    f.close()    

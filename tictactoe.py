@@ -1,7 +1,7 @@
 class Tictactoe(object):
 
     def __init__(self):
-        self.EMPTY = ' '
+        self.EMPTY = '_'
         self.X = 'X'
         self.O = 'O'
 

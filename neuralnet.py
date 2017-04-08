@@ -80,21 +80,25 @@ class Neural_Net(object):
 
             #debug
 
-    def import_network(self, json_network):
-        data = json.loads(json_network)
-        layers = data["nr_inputs"]
-
-        layers.extend([nodes for nodes in data["layers"]])
-
-
    
-    def export_network(self):
+    def export(self):
         network = {}
         network["nr_inputs"] = self.layers[0]
-        network["nr_ouputs"] = self.layers[-1]
+        network["nr_outputs"] = self.layers[-1]
         network["nr_layers"] = len(self.layers)
 
-        layers = [] 
+        layers = []
+
+        for l in range(len(self.layers) - 1):
+            layer = {}
+            layer["nr_nodes"] = self.layers[l+1]
+            layer["activation_function"] = { "type": "sigmoid" }
+            layer["input_weights"] = self.weights[l].tolist()
+            layer["input_biases"] = self.biases[l].tolist()
+
+            layers.append(layer)
+
+        network["layers"] = layers 
 
         return json.dumps(network)
         
