@@ -1,5 +1,4 @@
 import json
-import numpy as np
 from neuralnet import *
 
 def import_training_data(json_data):
@@ -7,8 +6,8 @@ def import_training_data(json_data):
     
     datas = json.loads(json_data)
     for data in datas:
-        x = list(map(int, data["input"].split(",")))
-        y = list(map(int, data["output"].split(",")))
+        x = map(int, data["input"].split(","))
+        y = map(int, data["output"].split(","))
 
         training_data.append((x, y))
 
@@ -24,15 +23,9 @@ def import_network(json_network):
     nn = Neural_Net(layers)
 
     weights = [layer["input_weights"] for layer in network_data["layers"]]
-    nn.weights = np.array(weights)
+    nn.weights = weights
 
-    biases = [layer["input_biases"] for layer in network_data["layers"]]
-    nn.biases = np.array(biases)
-
-    #TODO
-    #activation functions from import
-
-    return nn
+    print(weights)
 
 
     
