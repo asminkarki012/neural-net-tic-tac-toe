@@ -1,5 +1,5 @@
 class Tictactoe(object):
-
+    
     def __init__(self):
         self.EMPTY = '_'
         self.X = 'X'
@@ -36,6 +36,9 @@ class Tictactoe(object):
         if all(non_empty):
             return True
         return False
+
+    def is_valid_move(self, move):
+        return self.board[move] == self.EMPTY
     
     def reset(self): 
         self.turn = self.X
@@ -80,9 +83,21 @@ class Tictactoe(object):
         for i in range(self.SIZE**2):
             if i % self.SIZE == 0 and not i == 0:
                 print()
-                print(''.join(['-' for i in range(self.SIZE*2 - 1)]))
+                #'print(''.join(['-' for i in range(self.SIZE*2 - 1)]))
             if not i % self.SIZE == 0:
                 print('|', end='')
             print(self.board[i], end='')
         print()
+
+    def export_board(self):
+        export = []
+        for pos in self.board:
+            if pos == self.X:
+                export.append(-1)
+            elif pos == self.O:
+                export.append(1)
+            else:
+                export.append(0)
+
+        return export
 
