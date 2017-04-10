@@ -13,28 +13,25 @@ class Neural_Net(object):
         # Activation functions
         self.activation = sigmoid
         self.activation_derivative = sigmoid_derivative
-        
 
         # Cost functions
         self.cost = mse
         self.cost_derivative = mse_derivative
 
-        #debug
-
 
     def feed_forward(self, X):
-        y_hat = np.reshape(X, [len(X),-1])
+        a = np.reshape(X, [len(X),-1])
         
         for bias, weight in zip(self.biases, self.weights):
-            z = np.dot(weight, y_hat) + bias
-            y_hat = self.activation(z)
+            z = np.dot(weight, a) + bias
+            a = self.activation(z)
 
             # Debug
             #print("z shape = " + z.shape)
-            #print("yhat shape = " = y_hat.shape)
+            #print("yhat shape = " = a.shape)
 
         # Tranpose on return for readability
-        return y_hat.T
+        return a.T
 
     
     def forward_backward_prop(self, x, y, learning_rate):
@@ -93,12 +90,12 @@ class Neural_Net(object):
         #print("bias after update shape =", [b.shape for b in self.biases])
 
 
-    def train(self, training_data, learning_rate, epochs):
+    def train(self, training_data, learning_rate, epochs, debug=False):
         for i in range(epochs):
             for (x, y) in training_data:
                 self.forward_backward_prop(x, y, learning_rate)
 
-            if i % 100 == 0:
+            if debug and i % 100 == 0:
                 output = self.feed_forward(x)
                 print("Epoch " + str(i) + " - Error: " + str(np.linalg.norm(self.cost(output, y))))
 
@@ -125,20 +122,29 @@ class Neural_Net(object):
         return json.dumps(network)
         
 
+# Activation functions
 def sigmoid(x):
-    return 1/(1+np.exp(-x)) 
+    return 1/(1+np.exp(-x))
 
 def sigmoid_derivative(x):
     return (sigmoid(x) * (1 - sigmoid(x)))
 
 def tanh(x):
-    return (np.tanh(x) + 1)/2
+    return (np.tanh(x))
 
 def tanh_derivative(x):
     return (1 - np.square(tanh(x)))
 
+
+# Cost functions
 def mse(actual, expected):
     return 0.5 * np.square(actual - expected)
 
 def mse_derivative(actual, expected):
     return (actual - expected)
+
+def cross_entropy(actual, expected):
+    return -(expected * np.log(actual) + (1 - expected)*np.log(1 - actual))
+
+def cross_entropy_derivative(actual, expected):
+    return (actual - expected) / ((1 - actual)*actual)

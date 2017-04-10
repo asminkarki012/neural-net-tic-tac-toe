@@ -7,8 +7,8 @@ def import_training_data(json_data):
     
     datas = json.loads(json_data)
     for data in datas:
-        x = list(map(int, data["input"].split(",")))
-        y = list(map(int, data["output"].split(",")))
+        x = data["input"]
+        y = data["output"]
 
         training_data.append((x, y))
 
@@ -35,3 +35,13 @@ def import_network(json_network):
     return nn
 
     
+def to_training_data(game_history):
+    training_data = []
+    
+    for move in game_history:
+        input = move["input"]
+        output = move["output"]
+
+        training_data.append((input, output))
+
+    return training_data
