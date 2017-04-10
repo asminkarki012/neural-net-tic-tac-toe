@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage[backend=biber]{biblatex}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{gensymb}
+\addbibresource{references.bib}
+
+\newcommand{\n}[0]{\\[\baselineskip]}
+
+\title{CS3105 Learning Noughts and Crosses}
+\date{2017-04-12}
+\author{140011146}
+
+\begin{document}
+
+\maketitle
+
+\pagenumbering{arabic}
+
+
+\section{Introduction}
+In this practical we were asked to create a multi-layer feed-forward neural network that is trained to play Noughts and Crosses (or Tic-Tac-Toe) and provide the relevant datasets.
+
+I was successful in creating a neural network with error back propagation in Python. To train the network to play the game, I first trained it to play against a random AI...
+\section{Implementation of neural net}
+My implementation was written in Python. I chose to use Python because \texttt{numpy} was a very useful library for matrix and vector multiplication, allow me to calculate outputs/errors of each layer very simply. 
+
+
+\section{Design of network}
+\subsection{Initial weights and biases}
+I first initialise the weights and biases of the network using a random Gaussian distribution of mean 0 and variance 1 (\texttt{np.random.randn}). However, this is obviously not optimal as the random weights and biases are not accurate and so would take longer to converge to the desired output. 
+\n
+According to \cite{DBLP}, it is fine to have biases be initialised to zero, but weights must not be initialised to the same value to avoid symmetry in the neurons of the hidden layer.
+
+\subsection{Finding the right design}
+To experimentally find what number of hidden neurons is a good choice, I run a script, playing and training the neural network after each game. I found that after playing roughly 10000 games, the win rate of the network starts to converge. To reduce variance due to the randomly set weights, I ran each experiment 100 times, varying the size of the hidden layer in each experiment and calculating the average win rate that the network achieved with those parameters. The script I used for these experiments can be found in \texttt{parameters.py}.
+\n
+From my results, I decided to create the neural network with layers (9, x, 9) for the size of the input, hidden and output layers respectively. 
+\subsection{Final design of neural net}
+
+\section{Testing}
+To test that my neural network was implemented correctly, I gave it two training examples and trained it on 1000 epochs. Afterwards, I fed the input of the two examples into the network and checked the output to see if there were close to the expected output. In addition to just checking the values of the output of the network, I also print the value of the cost function after a certain number of epochs. If the value of the cost function is converging to zero, then I know the network is working for those training examples. The script used for this can be found in \texttt{test.py}. 
+\section{Evaluation}
+
+\section{Conclusion}
+
+
+
+\section{Files in submission}
+
+\printbibliography
+
+
+\end{document}
