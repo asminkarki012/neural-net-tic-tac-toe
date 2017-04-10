@@ -10,7 +10,7 @@ running = True
 
 net = Neural_Net([9, 3, 9]) 
 input = [0.137289, 0.172, 0.75, 0.3, 0.999, 0.4123, 0.77773, 0.324, 0.6543]
-training_data = [(input, [0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])]
+training_data = [(input, [0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])]
 
 print("Before training: ")
 output_before = net.feed_forward(input)
@@ -23,8 +23,3 @@ print("After training: ")
 output = net.feed_forward(input)
 print(output)
 
-print(net.weights)
-
-with open("testnet.json", "w") as f:
-    f.write(net.export_network())
-    f.close()    

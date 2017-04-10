@@ -5,24 +5,39 @@ class Tictactoe(object):
         self.X = 'X'
         self.O = 'O'
 
+        self.XValue = -1
+        self.OValue = 1
+        self.EValue = 0
+
+        self.winner = self.EMPTY
+
         self.SIZE = 3
+
+        self.history = { self.X: [], self.O: [] }
 
         self.reset()
         
 
     def make_move(self, pos):
         if (pos < self.SIZE**2 and self.board[pos] == self.EMPTY):
+            self.save_move(pos)
+
             self.board[pos] = self.turn
-            self.print_board()
+            # self.print_board()
 
             if self.is_gameover():
-                print(self.turn + " won!")
-            elif self.is_board_full():
-                print("It's a draw!")
+                self.winner = self.turn
+                # print(self.turn + " won!")
+            # elif self.is_board_full():
+                # print("It's a draw!")
             else:
                 self.turn = self.next_turn()
         else:
             print("Invalid move")
+
+    def save_move(self, pos):
+        move = { "board": self.export_board(), "move": pos }
+        self.history[self.turn].append(move)
 
     def next_turn(self):
        return (self.O if self.turn == self.X else self.X)
@@ -43,8 +58,10 @@ class Tictactoe(object):
     def reset(self): 
         self.turn = self.X
         self.board = [self.EMPTY for i in range(self.SIZE**2)]
+        self.winner = self.EMPTY
+        self.history = { self.X: [], self.O: [] }
 
-        self.print_board()
+        # self.print_board()
       
 
     def is_row_over(self):
@@ -93,11 +110,29 @@ class Tictactoe(object):
         export = []
         for pos in self.board:
             if pos == self.X:
-                export.append(-1)
+                export.append(self.XValue)
             elif pos == self.O:
-                export.append(1)
+                export.append(self.OValue)
             else:
-                export.append(0)
+                export.append(self.EValue)
 
         return export
+
+    def export_winning_moves(self):
+        winning_moves = self.history[self.winner]
+
+        export = []
+
+        for move_made in winning_moves:
+            input = move_made["board"]
+            output = [0 for i in range(self.SIZE**2)]
+            output[move_made["move"]] = 1
+
+            data = { "input": input, "output": output }
+
+            export.append(data)
+
+        return export
+
+
 
