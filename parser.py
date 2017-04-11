@@ -1,8 +1,9 @@
 import json
+import ast
 import numpy as np
 from neuralnet import *
 
-def import_training_data(json_data):
+def import_training_data_json(json_data):
     training_data = []
     
     datas = json.loads(json_data)
@@ -14,6 +15,17 @@ def import_training_data(json_data):
 
     return training_data
 
+def import_training_data_csv(csv_file):
+    training_data = []
+
+    with open(csv_file, "r") as csv:
+        for line in csv:
+            line = line.strip()
+            if not line  == "":
+                io = ast.literal_eval((line))
+                training_data.append(io)
+
+    return training_data
 
 def import_network(json_network):
     network_data = json.loads(json_network)

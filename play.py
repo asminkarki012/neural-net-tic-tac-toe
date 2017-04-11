@@ -14,7 +14,7 @@ def get_move(game, ordered_moves):
 
 def main():
 
-    network_file = open("trained_net-9279-4-punish.json", "r")
+    network_file = open("trained_net.json", "r")
     neuralnet = parser.import_network(network_file.read())
     
     game = Tictactoe()

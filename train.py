@@ -4,7 +4,7 @@ import parser
 from neuralnet import *
 
 def main(argv):
-    inputfile = "training_data.json"
+    inputfile = "training_data.csv"
     outputfile = "net.json"
 
     #TODO neuralnet_opts
@@ -27,13 +27,16 @@ def main(argv):
     network_file = open(outputfile, "w")
 
     # Create the neural net
-    nn = Neural_Net([9,9,9])
-    training_data = parser.import_training_data(training_file.read())
-    learning_rate = 0.2
-    epochs = 1000
+    nn = Neural_Net([9, 27, 27, 9])
+    training_data = parser.import_training_data_csv(inputfile)
 
-    # Train it
-    nn.train(training_data, learning_rate, epochs)
+    print("Finish import: " + str(len(training_data)))
+
+    learning_rate = 0.2
+    epochs = 10000
+
+    # # Train it
+    nn.train(training_data, learning_rate, epochs, True)
 
     # Export trained network as JSON
     nn_json = nn.export()

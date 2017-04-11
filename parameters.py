@@ -27,7 +27,9 @@ def play_and_train(game, layers, games):
     ai_wins = 0
     player_wins = 0
     draws = 0
-    for k in range(games):
+    games = 0
+    training_data = []
+    while True:
         game.reset()
         player = random.randint(0, 1)
 
@@ -66,18 +68,25 @@ def play_and_train(game, layers, games):
 
         if (game.winner == player):
             player_wins += 1
+            losing_moves = game.export_losing_moves(ai)
+            # train_ai(neuralnet, [losing_moves[-1]], 0.1, 5)
+
         elif (game.winner == ai):
             ai_wins += 1
+            # train_ai(neuralnet, game.export_player_moves(ai), 0.1, 5)
         else:
             draws += 1
+            train_ai(neuralnet, game.export_player_moves(ai), 0.1, 5)
 
-        if game.is_gameover():
-            train_ai(neuralnet, game.export_winning_moves(), 0.1, 8)
+        games += 1
 
         ai_winrate = (ai_wins+draws) / (ai_wins + player_wins + draws)
         # print("Player wins: %d, AI wins: %d, Draws: %d - AI win rateL %lf" % (player_wins, ai_wins, draws, ai_winrate), end="\r")
 
-    return ai_winrate
+        if ai_winrate > 0.75:
+            return games
+
+    return ai_winrate 
 
 def main():
 
@@ -85,15 +94,16 @@ def main():
     output_layers = 9
     game = Tictactoe()
 
-    layers = (input_layers, 0, output_layers)
+    layers = (input_layers, 15, 27, output_layers)
 
     print("Test parameters: " + str(layers))
 
     winrate = 0
     for j in range(100):               
-        winrate += play_and_train(game, layers, 10000)
-        print("winrate: " + str(winrate/(j+1)))
-    # print()
+        winrate += play_and_train(game, layers, 0)
+        print("winrate: %d" % (winrate), end="\r")
+
+    print()
     print(str(layers) + " : " + str(winrate/100))
 
 if __name__ == "__main__":
