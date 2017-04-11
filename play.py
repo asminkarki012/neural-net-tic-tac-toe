@@ -1,4 +1,5 @@
 import parser
+import random
 from tictactoe import *
 
 
@@ -13,34 +14,48 @@ def get_move(game, ordered_moves):
 
 def main():
 
-    network_file = open("net.json", "r")
+    network_file = open("trained_net-9279-4-punish.json", "r")
     neuralnet = parser.import_network(network_file.read())
     
     game = Tictactoe()
-    print(game.is_valid_move(1))
+    ai_wins = 0
+    player_wins = 0
+    draws = 0
+
+    player = random.randint(0, 1)
+
+    if (player == 0):
+        player = game.X
+        ai = game.O
+    else:
+        player = game.O
+        ai = game.X
     
     running = True
-    while not game.is_gameover():
+    while not (game.is_gameover() or game.is_board_full()):
+        game.print_board()
 
-        # Player turn
-        move = int(input())
-        while not game.is_valid_move(move):
-            print("Invalid move")
+        if (game.turn == player):
+
+            #Player turn
             move = int(input())
+            while not game.is_valid_move(move):
+                move = int(input())
 
-        game.make_move(move)
+            game.make_move(move)
 
-        #AI turn
-        net_output = neuralnet.feed_forward(game.export_board())
-        print("ai output: " + str(net_output))
-        movelist = get_movelist(net_output)
-        ai_move = get_move(game, movelist)
-        print("AI move: " + str(ai_move))
-        game.make_move(ai_move)
-        
-    print(game.board)
+        else:
+            #AI turn
+            net_output = neuralnet.feed_forward(game.export_board())
+            print(net_output)
+            movelist = get_movelist(net_output)
+            ai_move = get_move(game, movelist)
 
-    print(game.is_gameover())
+            game.make_move(ai_move)
+
+    game.print_board()
+
+
 
 
 if __name__ == "__main__":

@@ -118,8 +118,8 @@ class Tictactoe(object):
 
         return export
 
-    def export_winning_moves(self):
-        winning_moves = self.history[self.winner]
+    def export_player_moves(self, player):
+        winning_moves = self.history[player]
 
         export = []
 
@@ -134,5 +134,21 @@ class Tictactoe(object):
 
         return export
 
+    def export_losing_moves(self, player):
+        losing_moves = self.history[player]
 
+        export = []
+
+        for move_made in losing_moves:
+            input = move_made["board"]
+            output = [0.75 for i in range(self.SIZE**2)]
+            output[move_made["move"]] = 0
+
+            data = { "input": input, "output": output }
+
+            export.append(data)
+
+        return export
+
+        
 
