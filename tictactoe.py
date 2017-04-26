@@ -23,13 +23,9 @@ class Tictactoe(object):
             self.save_move(pos)
 
             self.board[pos] = self.turn
-            # self.print_board()
 
             if self.is_gameover():
                 self.winner = self.turn
-                # print(self.turn + " won!")
-            # elif self.is_board_full():
-                # print("It's a draw!")
             else:
                 self.turn = self.next_turn()
         else:
@@ -60,9 +56,6 @@ class Tictactoe(object):
         self.board = [self.EMPTY for i in range(self.SIZE**2)]
         self.winner = self.EMPTY
         self.history = { self.X: [], self.O: [] }
-
-        # self.print_board()
-      
 
     def is_row_over(self):
         for i in range(0, (self.SIZE**2), self.SIZE):
@@ -100,7 +93,6 @@ class Tictactoe(object):
         for i in range(self.SIZE**2):
             if i % self.SIZE == 0 and not i == 0:
                 print()
-                #'print(''.join(['-' for i in range(self.SIZE*2 - 1)]))
             if not i % self.SIZE == 0:
                 print('|', end='')
             print(self.board[i], end='')

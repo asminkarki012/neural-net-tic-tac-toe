@@ -41,9 +41,6 @@ def import_network(json_network):
     biases = [layer["input_biases"] for layer in network_data["layers"]]
     nn.biases = np.array(biases)
 
-    #TODO
-    #activation functions from import
-
     return nn
 
     

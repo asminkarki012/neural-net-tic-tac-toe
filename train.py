@@ -4,16 +4,14 @@ import parser
 from neuralnet import *
 
 def main(argv):
+    # Default training data and output file
     inputfile = "training_data.csv"
     outputfile = "net.json"
 
-    #TODO neuralnet_opts
-    #neuralnet_opts = "neuralnet_opts.json"
-    
     try:
-        opts, args = getopt.getopt(argv, "hi:o:", ["--help"])
+        opts, args = getopt.getopt(argv, "i:o:", []])
     except getopt.GetoptError:
-        print("train.py --help for help")
+        print("Wrong usage, please check README.md")
         sys.exit(2)
 
     for opt, arg in opts:
