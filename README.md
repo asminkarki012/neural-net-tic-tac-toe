@@ -1,4 +1,4 @@
-# Neural Net for leaning Tic Tac Toe
+# Neural Net for learning Tic Tac Toe
 This is an  implementation of a multi layer feed forward neural networks. As I have focused on making my network learn via playing games against another AI and not by using a large dataset, the dataset provided in "training_data.csv" will not provide a competitive Noughts and Crosses AI.
 
 ## Testing the network
