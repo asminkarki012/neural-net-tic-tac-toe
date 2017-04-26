@@ -17,7 +17,9 @@ To play against the network, run `python3 play.py`. The script takes one option:
 The inputs to place moves on the board are as follows:
 
 | 0 | 1 | 2 |
+
 | 3 | 4 | 5 |
+
 | 6 | 7 | 8 |
 
 ## Reproducing a network
