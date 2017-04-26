@@ -1,7 +1,8 @@
 import parser
 import random
+import sys
+import getopt
 from tictactoe import *
-
 
 def get_movelist(list):
     list = list[0].tolist()
@@ -12,15 +13,32 @@ def get_move(game, ordered_moves):
         if game.is_valid_move(move):
             return move
 
-def main():
+def get_random_move():
+    return random.randint(0, 8)
 
-    network_file = open("trained_net.json", "r")
+def main(argv):
+
+    play_ai = False
+
+    try:
+        opts, args = getopt.getopt(argv, "i:ao:", [])
+    except getopt.GetoptError:
+        print("Wrong usage, please check README.md")
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt == "-i":
+            inputfile = arg
+        elif opt == "-o":
+            outputfile = arg
+        elif opt == "-a":
+            play_ai = True
+
+
+    network_file = open("net.json", "r")
     neuralnet = parser.import_network(network_file.read())
     
     game = Tictactoe()
-    ai_wins = 0
-    player_wins = 0
-    draws = 0
 
     player = random.randint(0, 1)
 
@@ -31,23 +49,29 @@ def main():
         player = game.O
         ai = game.X
     
-    running = True
     while not (game.is_gameover() or game.is_board_full()):
         game.print_board()
 
         if (game.turn == player):
 
             #Player turn
-            move = int(input())
-            while not game.is_valid_move(move):
+            if play_ai:
+                move = get_random_move()
+                while not game.is_valid_move(move):
+                    move = get_random_move()
+
+            else:
                 move = int(input())
+                while not game.is_valid_move(move):
+                    print("Invalid input")
+                    move = int(input())
 
             game.make_move(move)
 
         else:
             #AI turn
             net_output = neuralnet.feed_forward(game.export_board())
-            print(net_output)
+
             movelist = get_movelist(net_output)
             ai_move = get_move(game, movelist)
 
@@ -55,9 +79,11 @@ def main():
 
     game.print_board()
 
-
-
+    if game.is_gameover():
+        print(str(game.winner) + " won!")
+    else:
+        print("Draw!")
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
 

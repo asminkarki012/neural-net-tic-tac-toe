@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 from neuralnet import *
 
 def test_input(training_data):
@@ -11,12 +9,12 @@ def test_input(training_data):
 net = Neural_Net([9, 3, 9]) 
 
 #Random inputs
-input1 = [0.137289, 0.172, 0.75, 0.3, 0.999, 0.4123, 0.77773, 0.324, 0.6543]
-input2 = [-0.51, 0.5, -0.123, 0.3, 1, 0.444, 0.66123, 0.092, 0.843119]
+input1 = [0,0,0,0,0,0,0,0,0]
+input2 = [1,1,1,1,1,1,1,1,1]
 
 #Expected outputs
-output1 = [0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-output2 = [0, 0.5, 0, 0.5, 0, 0.5, 0, 0.5, 0]
+output1 = [1,1,1,1,1,1,1,1,1]
+output2 = [0,0,0,0,0,0,0,0,0]
 
 training_data = [(input1, output1), (input2, output2)]
 
