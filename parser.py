@@ -35,11 +35,11 @@ def import_network(json_network):
 
     nn = Neural_Net(layers)
 
-    weights = [layer["input_weights"] for layer in network_data["layers"]]
-    nn.weights = np.array(weights)
+    weights = [np.array(layer["input_weights"]) for layer in network_data["layers"]]
+    nn.weights = weights
 
-    biases = [layer["input_biases"] for layer in network_data["layers"]]
-    nn.biases = np.array(biases)
+    biases = [np.array(layer["input_biases"]) for layer in network_data["layers"]]
+    nn.biases = biases
 
     return nn
 

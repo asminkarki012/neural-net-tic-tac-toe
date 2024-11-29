@@ -9,7 +9,7 @@ def main(argv):
     outputfile = "net.json"
 
     try:
-        opts, args = getopt.getopt(argv, "i:o:", []])
+        opts, args = getopt.getopt(argv, "i:o:", [])
     except getopt.GetoptError:
         print("Wrong usage, please check README.md")
         sys.exit(2)
@@ -31,7 +31,7 @@ def main(argv):
     print("Finish import: " + str(len(training_data)))
 
     learning_rate = 0.2
-    epochs = 10000
+    epochs = 200
 
     # # Train it
     nn.train(training_data, learning_rate, epochs, True)
