@@ -31,7 +31,7 @@ def main(argv):
     print("Finish import: " + str(len(training_data)))
 
     learning_rate = 0.2
-    epochs = 200
+    epochs = 10000
 
     # # Train it
     nn.train(training_data, learning_rate, epochs, True)
