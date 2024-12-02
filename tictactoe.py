@@ -49,7 +49,8 @@ class Tictactoe(object):
         return False
 
     def is_valid_move(self, move):
-        return self.board[move] == self.EMPTY
+        # check move and board size
+        return move < len(self.board) and self.board[move] == self.EMPTY
     
     def reset(self): 
         self.turn = self.X
